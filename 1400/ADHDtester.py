@@ -25,3 +25,10 @@ detail = int(input('On a scale of 1-5, how would you rate your attention to deta
 point += detail
 
 print('You have scored total points of', point)
+
+#Final output based on user input
+
+if point >= 15:
+    print('Your child falls in the normal range with totoal score of', point)
+else:
+    print('Your child may have mild ADHD tendencies.')
