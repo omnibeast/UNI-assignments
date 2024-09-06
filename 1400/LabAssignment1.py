@@ -3,11 +3,20 @@ Programer: Saurav Pokharel
 Date: 09/03/2024
 Description:Generates a Poem based on user input. 
 """
-what = input("How are you feeling?")
-want = input("What do you want?")
-worries = input("What do you want me to worry about you?")
-luckyno = input("What's your lucky number?")
-understand = input ("What do you understand?")
+#getting inputs from user.
+name = input('My name is: ')
+love = input('I love: ')
+hope = input('I hope for: ')
+lucky_num = input('My lucky number is: ')
+admire = input('I admire: ')
+hate = input('I hate: ')
+goal = input('I want to achieve: ')
 
-print('I am', what)
-print('I want', want)
+#creating and printing poem
+print('\n My name is', name + '.')
+print('I love', love + '.')
+print('I hope for', hope + '.')
+print('My lucky number is', lucky_num + '.')
+print('I admire', admire + '.')
+print('I hate', hate + '.')
+print('I want to achive', goal + '.')
