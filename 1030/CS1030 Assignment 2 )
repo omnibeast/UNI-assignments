@@ -1,0 +1,29 @@
+1. What does CPU stand for?
+    CPU stands for Central Processing Unit.
+
+2. What are the four basic functions implemented by a CPU?
+    The four basic functions implemented by a CPU are as follows:
+        1. Fetch: The CPU collects a command out of memory.
+        2. Decoder: The Central Processing Unit decodes the instructions to determine what action must be taken.
+        3. Execute: The CPU performs the task that the instruction specifies.
+
+3. Which complex circuit is used to address Memory?
+    Memory Controller is the complex circuit which is used to address memory.
+
+4. In Computer technology, what is a bus? What are the three signal groups of a bus?
+    The bus is a communication system that allows different components of computer to transfer data, addresses, and control signals.
+
+    The three signal groups of a bus are as follows: 
+        1. Address bus: 
+            The funciton of address bus is to carry data between the CPU, and  memory.
+        2. Data bus: 
+            Data bus carries data between the CPU, memory, and the other components of the computer systems.
+        
+        3. Control bus:
+            It carries control signals, such as read and write signals, between the CPU and other system components.
+5. If you could afford any computer, what would you have?
+    If i could afford i would choose a high end desktop PC with following specifications:
+        CPU: Ryzen 9 7950x (16 core CPU with 4.5GHz clock speed)
+        GPU: NVIDIA GeForce RTX 4090 top of the line with 24 GB.
+        Motherboard: Gigabyte B650E Aorus Master with 4 PCIe 5.0 M.2 sockets.
+        RAM: Corsair's Obsidian 1000D as it comes with premium case along with excellent airflow and performance.
