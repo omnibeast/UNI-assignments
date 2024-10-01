@@ -1,7 +1,7 @@
 """
 Programer: Saurav Pokharel
 Date: 09/03/2024
-DescriptionADHD Tester. 
+Description: ADHD Tester. 
 """
 
 #default point set to 0
