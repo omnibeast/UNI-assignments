@@ -49,12 +49,12 @@ winingDistance = abs(guesses[0] - candyInJar)
 for i in range(1, len(guesses)): #Loop for determining Winner.
     distance = abs(guesses[i] - candyInJar)
     if distance == winingDistance:
-        winner.append(name[i])
+        winner.append(names[i])
     if distance < winingDistance:
         winner.clear()
         winingDistance = distance
-        winner.append(name[i])
+        winner.append(names[i])
 
 print("Actual number of Candy in the Jar was: ", candyInJar)
 
-print("Winners: ", winner, f"Guesses were off by: ", winingDistance)
+print("Winners: ", winner, "Guesses were off by: ", winingDistance)
