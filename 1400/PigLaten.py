@@ -1,3 +1,9 @@
+"""
+Programer: Saurav Pokharel
+Date: 09/03/2024
+Description: Translate words and sentences in to pig latin. 
+"""
+
 import random
 import string
 
