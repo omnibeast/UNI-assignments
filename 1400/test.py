@@ -1,50 +1,50 @@
-# Kangaroo Zoo Cost Estimator
+import random
+import string
 
-print("Welcome to the Kangaroo Zoo Cost Estimator")
+print("""
+   ___ _           __       _   _       
+  / _ (_) __ _    / /  __ _| |_(_)_ __  
+ / /_)/ |/ _` |  / /  / _` | __| | '_ \ 
+/ ___/| | (_| | / /__| (_| | |_| | | | |
+\/    |_|\__, | \____/\__,_|\__|_|_| |_|
+         |___/                          
+""") #Header
 
-while True:
-    print("\nChoose an option:")
-    print("1. Estimate Cost")
-    print("2. Quit")
 
-    choice = input("Enter choice: ")
+# Function to remove punctuation and special characters
+def clean_word(word):
+    """Remove punctuation and special characters from a word."""
+    return ''.join([char for char in word if char.isalpha()])
 
-    if choice == "1":
-        # Get number of guests 3 and under
-        num_under_3 = int(input("How many guests are 3 and under? "))
 
-        # Get number of other guests
-        num_other_guests = int(input("How many other guests will be jumping? "))
+# Function to translate word to Pig Latin
+def translate(word):
+    """Translate a word to Pig Latin."""
+    vowels = 'aeiou'
+    word = clean_word(word).lower()
 
-        # Ask if user wants to buy flopper passes
-        buy_passes = input("Do you want to buy any flopper passes? (yes/no) ")
-
-        # Initialize cost
-        cost = 0
-
-        # Calculate cost for guests 3 and under
-        cost += num_under_3 * 6
-
-        # Calculate cost for other guests
-        cost += num_other_guests * 12
-
-        # If user wants to buy flopper passes
-        if buy_passes.lower() == "yes":
-            # Get number of passes for 3 and under
-            num_under_3_passes = int(input("How many passes for 3 and under? "))
-
-            # Get number of regular passes
-            num_regular_passes = int(input("How many regular passes? "))
-
-            # Calculate cost for flopper passes
-            cost += num_under_3_passes * 50
-            cost += num_regular_passes * 85
-
-        # Print cost estimation
-        print(f"Cost Estimation: ${cost}")
-
-    elif choice == "2":
-        print("Thanks for using the cost estimator!")
-        break
+    if word[0] in vowels: #checking if the word begins with a vowel
+        return word + 'yay'
     else:
-        print("Invalid choice. Please try again.")
+        for i, letter in enumerate(word): #moving the first consonant cluster to the end and adding 'ay'
+            if letter in vowels:
+                return word[i:] + word[:i] + 'ay'
+        return word + 'ay'
+
+
+def piglatin(): #Pig Latin translator main function
+    print("Welcome to the Pig Latin Translator!")
+    while True:
+        sentence = input("Enter a sentence to translate (or 'quit' to exit): ")
+        if sentence.lower() == 'quit':
+            break
+        
+        # Split sentence into words, translate each word, and join back into sentence
+        translated_sentence = ' '.join([translate(word) for word in sentence.split()])
+        
+        print("Sentence translated to Pig Latin:", translated_sentence)
+        print()
+
+
+# Run the game
+piglatin()
