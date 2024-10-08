@@ -1,34 +1,39 @@
 import random
 import string
 
+print("""
+   ___ _           __       _   _       
+  / _ (_) __ _    / /  __ _| |_(_)_ __  
+ / /_)/ |/ _` |  / /  / _` | __| | '_ \ 
+/ ___/| | (_| | / /__| (_| | |_| | | | |
+\/    |_|\__, | \____/\__,_|\__|_|_| |_|
+         |___/                          
+""") #Header
+
 # Function to remove punctuation and special characters
 def clean_word(word):
     return ''.join([char for char in word if char.isalpha()])
 
 # Function to translate word to Pig Latin
-def pig_latin_translate(word):
+def translate(word):
     vowels = 'aeiou'
     word = clean_word(word).lower()
 
-    # Check if the word starts with a vowel
-    if word[0] in vowels:
+    if word[0] in vowels: #checking if the word begins with a vowel
         return word + 'yay'
     else:
-        # Move the first consonant cluster to the end and add 'ay'
-        for i, letter in enumerate(word):
+        for i, letter in enumerate(word): #moving the first consonant cluster to the end and adding 'ay'
             if letter in vowels:
-                return word[i:] + word[:i] + 'ay'
-        # If no vowels found (in rare cases), just return the word with 'ay'
+                return word[i:] + word[:i] + 'ay'.
         return word + 'ay'
 
-# Main function to run the Pig Latin translator
-def pig_latin_game():
+def piglatin(): #Pig Latin translator main function
     while True:
         word = input("Enter a word to translate to Pig Latin (or 'quit' to exit): ")
         if word.lower() == 'quit':
             break
-        print(f"Pig Latin Translation: {pig_latin_translate(word)}")
+        print("Pig Latin Translation:",translate(word))
         print()
 
 # Run the game
-pig_latin_game()
+piglatin()
