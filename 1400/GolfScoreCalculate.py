@@ -3,6 +3,18 @@ Programer: Saurav Pokharel
 Date: 10/17/2024
 Description: Calculate Golf Score. 
 """
+
+print("""
+   _____       _  __    _____                       _____      _            _       _       
+  / ____|     | |/ _|  / ____|                     / ____|    | |          | |     | |      
+ | |  __  ___ | | |_  | (___   ___ ___  _ __ ___  | |     __ _| | ___ _   _| | __ _| |_ ___ 
+ | | |_ |/ _ \| |  _|  \___ \ / __/ _ \| '__/ _ \ | |    / _` | |/ __| | | | |/ _` | __/ _ \
+ | |__| | (_) | | |    ____) | (_| (_) | | |  __/ | |___| (_| | | (__| |_| | | (_| | ||  __/
+  \_____|\___/|_|_|   |_____/ \___\___/|_|  \___|  \_____\__,_|_|\___|\__,_|_|\__,_|\__\___|
+                                                                                            
+                                                                                            
+""")
+
 # Initialize Par and Scores List
 par_values = [4, 3, 5, 4, 4, 3, 4, 5, 4]  # Default par values for 9 holes
 scores = [0] * 9  # Initialize all scores to 0 (indicating no score yet)
