@@ -1,0 +1,20 @@
+ 
+<!DOCTYPE html> 
+<html>
+    <head> <title>{topic}</title> </head>
+    <body> 
+        <h1>{topic}</h1> 
+        <p>{paragraph}</p> 
+        <ul>  <li>{item.strip()}</li>            
+            </ul> 
+        </body> 
+    </html>  <li>{item.strip()}</li>            
+            </ul> 
+        </body> 
+    </html>  <li>{item.strip()}</li>            
+            </ul> 
+        </body> 
+    </html>  <li>{item.strip()}</li>            
+            </ul> 
+        </body> 
+    </html> 
