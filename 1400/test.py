@@ -1,57 +1,50 @@
-#To store the list
-roster = []
+import requests
 
-#Load roster from file
-try:
-  #open the file
-  rosterFile = open('roster.txt', 'r')
+def accept_referral_code(referral_code: str):
+    """
+    Function to accept a referral code invitation on the Shein app and create new users.
 
-  for line in rosterFile:
-    roster.append(line.strip())
-except FileNotFoundError as err:
-  print(err)
-  print('Creating file for roster.')
-  #Creates empty file
-  rosterFile = open("roster.txt", "x")
-  print('File created.')
+    Parameters:
+    - referral_code: str
+        The referral code to be accepted.
 
-rosterFile.close()
+    Returns:
+    - str:
+        A message indicating the success or failure of accepting the referral code.
 
-while True:
-  print(roster)
-  while True:
+    Raises:
+    - ValueError:
+        Raises an error if the referral code is empty or invalid.
+    """
+
+    # Checking if the referral code is empty or invalid
+    if not referral_code:
+        raise ValueError("Referral code cannot be empty.")
+
+    # API endpoint for accepting the referral code invitation
+    url = "https://api.shein.com/shein-app-server/api/v2/user/acceptReferralCode"
+
+    # Request payload to accept the referral code
+    payload = {
+        "referralCode": '6CYQQTY7I'
+    }
+
     try:
-        print('1. Add Name\n2. Remove Name \n3. Quit')
-        #Make sure 1, 2, or 3 is entered
-        choice = int(input())
-        break
-    except ValueError as errCheck:
-        print(errCheck)
-        choice = 3
+        # Sending a POST request to accept the referral code
+        response = requests.post(url, json=payload)
 
-  if choice == 1:
-    print('Add Name:')
-    toAdd = input()
-    roster.append(toAdd)
-  elif choice == 2:
-    while True:
-        print('Remove Name:')
-        toRemove = input()
-        try:
-            roster.remove(toRemove)
-            break
-        except:
-            print('Error removing name')
-  else:
-    break
+        # Checking the response status code
+        if response.status_code == 200:
+            return "Referral code accepted successfully."
+        else:
+            return "Failed to accept the referral code."
 
-#Saves the list to the file
-try:
-    rosterFile = open('roster.txt', 'w')
-    #write to a file
-    for n in roster:
-        rosterFile.write(n + '\n')
-except:
-    print('Error writing to file.')
+    except requests.exceptions.RequestException as e:
+        return f"Error occurred while accepting the referral code: {str(e)}"
 
-rosterFile.close()
+
+# Example usage of the accept_referral_code function:
+
+referral_code = "rl5hwr"
+result = accept_referral_code(referral_code)
+print(result)
