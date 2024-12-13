@@ -1,0 +1,7 @@
+Order Date and Time: 12/12/2024 11:41:21 PM
+Customer Name: Saurav
+Order Summary:
+- Pizza: $12.50
+- Salad: $6.75
+Total: $19.25
+--------------------
