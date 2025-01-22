@@ -1,0 +1,11 @@
+/*1*/
+select custfirstname, custlastname
+from customer
+order by custlastname, custfirstname;
+
+/*2*/
+select custfirstname||' '|| custlastname as "fullName"
+from customer
+order by "fullName";
+
+/*3*/
