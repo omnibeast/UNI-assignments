@@ -1,0 +1,61 @@
+-- Saurav Pokharel Assignment 01
+
+SET PAGESIZE 5000;
+
+-- 01: List the names (first and last name) of all customers in alphabetical order (last name then first name).
+SELECT custfirstname, custlastname
+FROM Customer
+ORDER BY custlastname, custfirstname;
+
+-- 02: List the first and last names of employees with a last name starting with “J”. Sort them in alphabetical order by last name, then first name.
+SELECT Empfirstname , emplastname
+FROM Employee
+WHERE emplastname LIKE 'J%'
+ORDER BY emplastname, empfirstname;
+
+-- 03: List the customer number, full name (as one column), city, state, and zip for all customers who live in Seattle, WA. Sort by zip, then full name. Columns are named appropriately.
+SELECT custno AS "Customer", custfirstname || ' ' || custlastname AS "FullName", custcity AS CITY, custstate AS ST, custzip AS "Zip"
+FROM customer
+WHERE custcity = 'Seattle' AND custstate = 'WA'
+ORDER BY custzip, FullName;
+
+-- 04: List the product number, product name, product manufacturer, and product price for all products that cost more than $50. Arrange in descending order of product price. Columns are named appropriately.
+SELECT prodno, prodname AS "Product Name", prodmfg AS MANUFACTURE, prodprice AS "Price"
+FROM Product
+WHERE prodprice > 50.00
+ORDER BY prodprice DESC;
+
+-- 05: List the employee name as one column, phone number, and commission for employees whose commission is between 0.02 and 0.04 (inclusive). Sort by commission, then phone. Columns are named appropriately.
+SELECT EmpFirstName ||' '|| EmpLastName As EMPLOYEENAME, EmpPhone AS PHONE, EmpCommRate as "Commission"
+From Employee
+WHERE EmpCommRate >= 0.02 AND EmpCommRate <= 0.04
+ORDER BY EmpCommRate, empphone;
+
+-- 06: List the order number, customer number, employee number, recipient name, city, and state for all orders sent to Seattle, WA or Denver, CO. Sort by order number. Columns are named appropriately.
+SELECT ordno as "Order", custno AS "Customer", empno AS "employee", ordname AS "Recipient", ordcity AS "City", ordstate AS "st"
+FROM ordertbl
+WHERE ordcity IN ('Seattle', 'Denver') AND ordstate IN ('WA', 'CO')
+ORDER BY ordno;
+
+-- 07: List the order number, product number, and quantity for orders with quantities of 10, 5, or 3. Sort by quantity in descending order, then by order number. Columns are named appropriately.
+SELECT ordno AS "Order", prodno AS "Product", prodqoh AS quantity
+FROM ordertbl, product
+WHERE prodqoh IN (10, 5, 3)
+ORDER BY prodqoh DESC, ordno;
+
+-- 08: List the order number, order date, recipient, street, city, and state for orders where the recipient’s name contains a “y”. Sort by order number. Columns are named appropriately.
+SELECT ordno, orddate AS orderdate, ordname AS recipient, ordstreet AS street, ordcity AS city, ordstate AS ST
+FROM ordertbl
+WHERE ordname LIKE '%y%'
+ORDER BY ordno;
+
+-- 09: List the product number, product name, product manufacturer, product price, and next ship date for products with a ship date. Sort by product price. Columns are named appropriately.
+SELECT prodno, prodname AS productname, prodmfg AS Maufacturer, prodprice AS Price, prodnextshipdate AS shipdate
+FROM product
+WHERE prodnextshipdate IS NOT NULL
+ORDER BY prodprice;
+
+-- 10: Provide a list of distinct cities where orders have been placed. Arrange in alphabetical order of city name. Column is named appropriately.
+SELECT DISTINCT ordcity AS City
+FROM ordertbl
+ORDER BY ordcity;
