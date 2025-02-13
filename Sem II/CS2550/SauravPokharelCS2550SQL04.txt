@@ -1,0 +1,125 @@
+--SAURAV POKAHREL Assignment 4
+--01
+SELECT 
+    s.firstname ||' '|| s.lastname as fullname, 
+    s.Phone, 
+    s.City, 
+    s.State, 
+    s.Zip, 
+    c.SubjectDescription
+FROM Students s
+INNER JOIN Registration r ON s.StudentID = r.StudentID
+INNER JOIN Sections sec ON r.SectionID = sec.SectionID
+INNER JOIN Courses c ON sec.CourseID = c.CourseID
+WHERE s.State = 'OR' AND c.SubjectDescription LIKE '%Engineering%'
+ORDER BY c.SubjectDescription, fullname;
+
+--02
+SELECT 
+    INITCAP(SubjectCode) AS Subj, 
+    CourseNumber as Cours, 
+        SubjectDescription
+FROM courses
+WHERE SUBSTR(SubjectDescription, 16, 1) = '&' AND CourseNumber >= 3000
+ORDER BY SubjectDescription, CourseNumber;
+
+--03
+SELECT 
+    p.LastName || ', ' || SUBSTR(p.FirstName, 1, 1) || '.' AS ProfLastFirst,
+    sec.SectionID, 
+    c.SubjectCode, 
+    c.CourseNumber
+FROM Professors p
+INNER JOIN Sections sec ON p.ProfessorID = sec.ProfessorID
+INNER JOIN Courses c ON sec.CourseID = c.CourseID
+WHERE c.SubjectCode = 'WEB'  AND c.CourseNumber BETWEEN 3000 AND 4000
+ORDER BY ProfLastFirst, sec.SectionID;
+
+--04
+SELECT LPAD(s.StudentID, 20, '*') AS StudentID, 
+    LOWER(s.FirstName) AS FirstName, 
+    s.LastName, 
+    s.Zip,
+    UPPER(s.City) AS City, 
+    s.State 
+FROM Students s
+INNER JOIN Registration r ON s.StudentID = r.StudentID
+WHERE (s.City = 'Aberdeen' AND s.State = 'SD') OR (s.City = 'Rock Springs' AND s.State = 'WY')
+GROUP BY s.StudentID, s.FirstName, s.LastName, s.City, s.State, s.Zip
+ORDER BY s.LastName, s.FirstName, s.City, s.State;
+
+--05
+SELECT 
+    RPAD(p.FirstName ||' '|| p.LastName, 30, '.') AS "Professor Name",
+    p.Zip, 
+    sec.Capacity, 
+    sec.SectionID, 
+    c.SubjectCode, 
+    c.CourseNumber,
+    c.Subjectdescription
+FROM Professors p
+INNER JOIN Sections sec ON p.ProfessorID = sec.ProfessorID
+INNER JOIN Courses c ON sec.CourseID = c.CourseID
+WHERE c.SubjectDescription = 'Nutrition' AND sec.Capacity = 15
+ORDER BY sec.SectionID;
+
+--06
+SELECT 
+    loc.LocationID, 
+    c.SubjectCode, 
+    c.CourseNumber, 
+    sec.Capacity
+FROM Locations loc
+INNER JOIN Sections sec ON loc.LocationID = sec.LocationID
+INNER JOIN Courses c ON sec.CourseID = c.CourseID
+WHERE (c.SubjectCode = 'PE' OR c.SubjectCode = 'CS') AND SUBSTR(loc.LocationID, 2, 1) = '5'
+ORDER BY c.SubjectCode, c.CourseNumber, sec.Capacity;
+
+--07
+SELECT 
+    DISTINCT s.City, 
+    s.State,
+       CASE s.State 
+           WHEN 'SD' THEN 'South Dakota'
+           WHEN 'ID' THEN 'Idaho'
+       END AS FullStateName
+FROM Students s
+WHERE s.State IN ('SD', 'ID')
+ORDER BY s.City, s.State;
+
+--08
+SELECT s.FirstName, s.LastName, s.City, s.State, s.StudentID,
+       r.SectionID, a.Assignmenttypeid, ac.description, a.Score
+FROM Students s
+INNER JOIN Registration r ON s.StudentID = r.StudentID
+INNER JOIN SECTIONS sec ON r.SectionID = sec.SectionID
+INNER JOIN ASSIGNMENTSCORE a ON sec.SectionID = a.SectionID
+INNER JOIN ASSIGNMENTCODE ac ON a.assignmenttypeid = ac.assignmenttypeid
+WHERE s.City = 'Provo' AND s.State = 'UT'
+ORDER BY a.Score, r.SectionID, s.LastName, s.FirstName;
+
+--09
+SELECT 
+    s.FirstName, 
+    s.LastName, 
+    TO_CHAR(s.TuitionBalance, '$9999.99') AS Tuition, 
+    r.RegistrationDate as Regdate
+FROM Students s
+INNER JOIN Registration r ON s.StudentID = r.StudentID
+WHERE TO_CHAR(r.RegistrationDate, 'MM-DD') = '07-31'
+ORDER BY r.RegistrationDate DESC;
+
+--10
+SELECT 
+    s.FirstName, 
+    s.LastName, 
+    s.TuitionBalance as Balance,
+       CASE 
+           WHEN s.TuitionBalance >= 9900 THEN 'Nearing Limit'
+           WHEN s.TuitionBalance >= 9800 THEN 'Approaching Limit'
+       END AS Message
+FROM Students s
+INNER JOIN Registration r ON s.StudentID = r.StudentID
+WHERE s.TuitionBalance > 9800
+GROUP BY s.FirstName, s.LastName, s.TuitionBalance
+ORDER BY s.TuitionBalance DESC;
