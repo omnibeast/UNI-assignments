@@ -21,11 +21,11 @@ route(Origin, Destination, Stops) :-
     flight(Origin, Intermediate), route(Intermediate, Destination, Stops1), Stops is Stops1 + 1.
 
 % route cities list
-route_with_cities(Origin, Destination, Stops, [Origin|Cities]) :-  
+route_cities(Origin, Destination, Stops, [Origin|Cities]) :-  
     flight(Origin, Destination), 
     Stops is 0, 
     Cities = [Destination].
-route_with_cities(Origin, Destination, Stops, [Origin|Cities]) :- 
+route_cities(Origin, Destination, Stops, [Origin|Cities]) :- 
     flight(Origin, Intermediate), 
     route_with_cities(Intermediate, Destination, Stops1, Cities1), 
     Stops is Stops1 + 1, 

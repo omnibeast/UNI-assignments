@@ -1,3 +1,58 @@
--- SauravPokharel 01 listing first name, last name and admission date for all with date Mar 26 2021.
+-- Saurav Pokharel | CS2550 | SQL Assignment 02
 
---
+-- 01 Query to retrieve the first name, last name, and admission date of students admitted on March 26, 2021
+SELECT firstname AS "First Name", lastname AS "Last Name", admissiondate AS "Admission Date"
+FROM students
+WHERE TO_CHAR(admissiondate, 'Mon DD YYYY') = 'Mar 26 2021'
+ORDER BY lastname, firstname;
+
+-- 02 Query to retrieve section details including section ID, course ID, start time, and location for specific locations
+SELECT sectionID, courseID, TO_CHAR(sectionstartdate, 'MM/DD/YYYY HH:MI AM') AS "Section Start Time", locationID
+FROM sections
+WHERE locationID IN (2555, 4415, 5943)
+ORDER BY courseID, sectionstartdate;
+
+-- 03 Query to retrieve course and section details for sections starting on January 7, 2021
+SELECT courseID, sectionID, TO_CHAR(sectionstartdate, 'Mon DD YYYY HH:MI AM'), professorID, capacity
+FROM sections
+WHERE sectionstartdate = TO_DATE('Jan 07 2021', 'Mon DD YYYY')
+ORDER BY sectionstartdate DESC, courseID;
+
+-- 04 Query to retrieve student registration details within a specific date-time range
+SELECT studentID , sectionID, TO_CHAR(registrationdate, 'Mon DD YYYY HH:MI AM') AS "Date and Time Registered"
+FROM registration
+WHERE registrationdate BETWEEN TO_DATE('Apr 30 2019 10:00 AM', 'Mon DD YYYY HH:MI AM') AND TO_DATE('May 01 2019 05:00 PM', 'Mon DD YYYY HH:MI AM')
+ORDER BY registrationdate DESC, sectionID, studentID;
+
+-- 05 Query using Oracle Dual Table to calculate the end date of a semester starting on January 8, 2024
+SELECT TO_CHAR(TO_DATE('Jan 08 2024', 'Mon DD YYYY') + 108, 'Mon DD YYYY') AS "End Of Semester"
+FROM dual;
+
+-- 06 Query to retrieve course ID, section ID, and section start time for courses in a specific range
+SELECT courseID, sectionID, TO_CHAR(sectionstartdate, 'HH:MI AM') AS "HourDay"
+FROM sections
+WHERE courseID BETWEEN 12000 AND 12029
+ORDER BY courseID, sectionID;
+
+-- 07 Query to retrieve student admission details within five days after March 29, 2015, at noon
+SELECT studentID, firstname, lastname, TO_CHAR(admissiondate, 'Mon DD YYYY HH:MI AM') AS "Admission Date"
+FROM students
+WHERE admissiondate BETWEEN TO_DATE('Mar 29 2015 12:00 PM', 'Mon DD YYYY HH:MI AM') AND TO_DATE('Apr 03 2015 11:59 PM', 'Mon DD YYYY HH:MI AM')
+ORDER BY admissiondate, lastname, firstname;
+
+-- 08 Query to calculate the number of years since admission for students living in a zip code pattern
+SELECT studentID, firstname, lastname, TO_CHAR(MONTHS_BETWEEN(SYSDATE, admissiondate) / 12, '999.99') AS "Years", zip
+FROM students
+WHERE zip LIKE '84%4'
+ORDER BY TO_NUMBER(TO_CHAR(MONTHS_BETWEEN(SYSDATE, admissiondate) / 12, '999.99')), lastname, firstname;
+
+-- 09 Query to list unique starting months and years for all sections
+SELECT DISTINCT TO_CHAR(sectionstartdate, 'Mon YYYY') AS "SectionMonths"
+FROM sections
+ORDER BY TO_DATE("SectionMonths", 'Mon YYYY');
+
+-- 10 Query to retrieve students admitted at exactly 10:19 AM, ordered by admission date in descending order
+SELECT firstname, lastname, TO_CHAR(admissiondate, 'Mon DD YYYY HH:MI AM') AS admissiondatetime
+FROM students
+WHERE TO_CHAR(admissiondate, 'HH:MI AM') = '10:19 AM'
+ORDER BY admissiondate DESC;
