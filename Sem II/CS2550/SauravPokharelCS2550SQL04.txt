@@ -89,13 +89,13 @@ ORDER BY s.City, s.State;
 
 --08
 SELECT s.FirstName, s.LastName, s.City, s.State, s.StudentID,
-       r.SectionID, a.Assignmenttypeid, ac.description, a.Score
+    r.SectionID, a.Assignmenttypeid AS "Assignment Type ID", ac.description, a.Score
 FROM Students s
 INNER JOIN Registration r ON s.StudentID = r.StudentID
 INNER JOIN SECTIONS sec ON r.SectionID = sec.SectionID
 INNER JOIN ASSIGNMENTSCORE a ON sec.SectionID = a.SectionID
 INNER JOIN ASSIGNMENTCODE ac ON a.assignmenttypeid = ac.assignmenttypeid
-WHERE s.City = 'Provo' AND s.State = 'UT'
+WHERE s.City = 'Provo' AND s.State = 'UT' AND a.assignmentnumber = '5'
 ORDER BY a.Score, r.SectionID, s.LastName, s.FirstName;
 
 --09
