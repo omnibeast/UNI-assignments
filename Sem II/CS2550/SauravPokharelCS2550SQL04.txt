@@ -88,8 +88,16 @@ WHERE s.State IN ('SD', 'ID')
 ORDER BY s.City, s.State;
 
 --08
-SELECT s.FirstName, s.LastName, s.City, s.State, s.StudentID,
-    r.SectionID, a.Assignmenttypeid AS "Assignment Type ID", ac.description, a.Score
+SELECT 
+    s.StudentID,
+    s.FirstName, 
+    s.LastName, 
+    s.City, 
+    s.State, 
+    r.SectionID, 
+    a.Assignmenttypeid AS "AS", 
+    ac.description, 
+    a.Score
 FROM Students s
 INNER JOIN Registration r ON s.StudentID = r.StudentID
 INNER JOIN SECTIONS sec ON r.SectionID = sec.SectionID
