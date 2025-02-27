@@ -1,0 +1,131 @@
+--Saurav Pokharel  
+--SQL Assignment 6
+
+--01
+SELECT 
+    city, 
+    state, 
+    zip, 
+    COUNT(*) AS NumStudents
+FROM students
+GROUP BY city, state, zip
+HAVING COUNT(*) >= 30
+ORDER BY NumStudents DESC, state, city;
+
+--02
+SELECT 
+    s.studentid, 
+    s.firstname, 
+    s.lastname, 
+    COUNT(*) AS courseSections
+FROM students s
+INNER JOIN registration r ON s.studentid = r.studentid
+INNER JOIN sections sec ON r.sectionid = sec.sectionid
+INNER JOIN courses c ON sec.courseid = c.courseid
+WHERE c.subjectcode = 'CS'
+GROUP BY s.studentid, s.firstname, s.lastname
+HAVING COUNT(*) > 10
+ORDER BY courseSections DESC, s.lastname, s.firstname;
+
+--03
+SELECT 
+    b.buildingname, 
+    l.room, 
+    COUNT(*) AS NumSections
+FROM buildings b
+INNER JOIN locations l ON b.building = l.building
+INNER JOIN sections s ON l.locationid = s.locationid
+WHERE s.semester <> 'Online'  
+AND b.buildingname <> 'Online Class'  
+GROUP BY b.buildingname, l.room
+HAVING COUNT(*) >= 15
+ORDER BY NumSections DESC, b.buildingname, l.room;
+
+--04
+SELECT 
+    s.firstname, 
+    s.lastname, 
+    To_Char(s.admissiondate, 'Mon DD YYYY HH:MI AM') as admitdate, 
+    COUNT(*) AS NumSections
+FROM students s
+INNER JOIN registration r ON s.studentid = r.studentid
+WHERE s.admissiondate >= TO_DATE('15-JUN-2020 12:00 AM', 'DD-MON-YYYY HH:MI AM')
+GROUP BY s.studentid, s.firstname, s.lastname, s.admissiondate
+HAVING COUNT(*) > 12
+ORDER BY NumSections DESC, s.lastname, s.firstname;
+
+--05
+SELECT 
+    b.buildingname, 
+    l.room, 
+    COUNT(*) AS NumStudents
+FROM buildings b
+INNER JOIN locations l ON b.building = l.building
+INNER JOIN sections s ON l.locationid = s.locationid
+INNER JOIN registration r ON s.sectionid = r.sectionid
+WHERE s.semester <> 'Online'
+AND b.buildingname <> 'Online Class'
+GROUP BY b.buildingname, l.room
+HAVING COUNT(*) >= 30
+ORDER BY b.buildingname, l.room, NumStudents;
+
+--6
+SELECT 
+    p.city, 
+    p.state, 
+    p.zip, 
+    COUNT(*) AS numSections
+FROM professors p
+JOIN sections s ON p.professorID = s.professorID
+GROUP BY p.city, p.state, p.zip
+HAVING COUNT(*) >= 25
+ORDER BY numSections, p.zip;
+
+--07
+SELECT 
+    p.city, 
+    p.state, 
+    COUNT(*) AS numProfessors, 
+    To_Char(MIN(p.hireDate), 'MON DD HH:MI AM') AS earliestHireDate
+FROM professors p
+GROUP BY p.city, p.state
+HAVING COUNT(*) > 20
+ORDER BY min(p.hiredate), numProfessors;
+
+--08
+SELECT 
+    c.subjectCode, 
+    c.courseNumber, 
+    c.subjectDescription as subdescription, 
+    COUNT(*) AS numSections
+FROM courses c
+JOIN sections s ON c.courseID = s.courseID
+WHERE c.subjectDescription IN ('Computer Science', 'Web and User Experience')
+GROUP BY c.subjectCode, c.courseNumber, c.subjectDescription
+HAVING COUNT(*) > 4
+ORDER BY c.subjectDescription, c.courseNumber;
+
+--09
+SELECT 
+    s.city, 
+    s.state, 
+    TO_CHAR(SUM(s.tuitionbalance), '$999999.99') AS TOTALBAL, 
+    COUNT(*) AS "NUMSections"
+FROM students s
+JOIN registration r ON s.studentID = r.studentID
+JOIN sections sec ON r.sectionID = sec.sectionID
+GROUP BY s.city, s.state
+HAVING SUM(s.tuitionbalance) >= 200000 AND SUM(s.tuitionbalance) < 1000000 AND COUNT(*) > 55
+ORDER BY TOTALBAL, count(*);
+
+--10
+SELECT 
+    a.sectionID, 
+    ROUND(AVG(a.score), 3) AS avgScore, 
+    COUNT(*) AS numStudents
+FROM assignmentscore a
+INNER JOIN REGISTRATION R ON R.STUDENTID = A.STUDENTID AND R.SECTIONID = A.SECTIONID
+WHERE ASSIGNMENTTYPEID = 'HM'
+GROUP BY a.sectionID
+HAVING COUNT(*) >= 60 AND AVG(a.score) >= 80
+ORDER BY numStudents DESC, avgScore DESC;
