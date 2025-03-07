@@ -1,0 +1,14 @@
+--SauravPokharel
+--SQL Assignments 07
+
+--01
+SELECT firstname, lastname, To_Char(admissiondate, 'MON DD YYYY HH:MI AM') as admitdate
+FROM students
+WHERE To_Char(admissiondate, 'Mon YYYY') = 'Aug 2020' 
+AND tuitionbalance > (SELECT avg(tuitionbalance)
+                      FROM students 
+                      WHERE To_Char(admissiondate, 'Mon YYYY') = 'Aug 2020')
+ORDER BY lastname, firstname;
+
+--02
+SELECT firstname, lastname, s
