@@ -1,0 +1,28 @@
+-- Saurav Pokharel
+-- CS2550
+-- SQL Assignment 08
+-- 04/29/2020
+
+-- 01
+
+--04
+SELECT s.studentID, s.firstName, s.lastName, s.city, s.state, s.zip, COUNT(*) AS NUMCOURSES
+FROM students s
+INNER JOIN registration r ON s.studentID = r.studentID
+INNER JOIN sections sec ON r.sectionID = sec.sectionID
+INNER JOIN courses c ON sec.courseID = c.courseID
+WHERE c.subjectCode = 'NET'
+GROUP BY s.studentID, s.firstName, s.lastName, s.city, s.state, s.zip
+HAVING COUNT(DISTINCT c.courseID) = (
+    SELECT MAX(course_count)
+    FROM (
+        SELECT COUNT(DISTINCT c2.courseID) AS course_count
+        FROM students s2
+        INNER JOIN registration r2 ON s2.studentID = r2.studentID
+        INNER JOIN sections sec2 ON r2.sectionID = sec2.sectionID
+        INNER JOIN courses c2 ON sec2.courseID = c2.courseID
+        WHERE c2.subjectCode = 'NET'
+        GROUP BY s2.studentID
+    ))
+ORDER BY s.studentID;
+

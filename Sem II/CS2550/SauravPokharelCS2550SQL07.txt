@@ -1,14 +1,166 @@
---SauravPokharel
---SQL Assignments 07
-
+--SAURAVPOKHAREL
+--ASSIGNMENT 07
 --01
-SELECT firstname, lastname, To_Char(admissiondate, 'MON DD YYYY HH:MI AM') as admitdate
+SELECT firstName, 
+       lastName, to_char(admissiondate, 'Mon DD YYYY HH:MI AM') as admitdate
 FROM students
-WHERE To_Char(admissiondate, 'Mon YYYY') = 'Aug 2020' 
-AND tuitionbalance > (SELECT avg(tuitionbalance)
-                      FROM students 
-                      WHERE To_Char(admissiondate, 'Mon YYYY') = 'Aug 2020')
-ORDER BY lastname, firstname;
+WHERE to_char(admissiondate, 'Mon YYYY') = 'Aug 2020'
+AND tuitionBalance > 
+    (SELECT AVG(tuitionBalance)
+     FROM students)
+ORDER BY lastName, firstName;
 
 --02
-SELECT firstname, lastname, s
+SELECT firstName, 
+       lastName,
+       streetaddress,
+       city, 
+       state, 
+       zip
+FROM students
+WHERE tuitionBalance = 
+    (SELECT MAX(tuitionBalance)
+     FROM students)
+ORDER BY lastName, firstName;
+
+--03
+SELECT firstName, 
+       lastName, 
+       streetAddress, 
+       city, 
+       state, 
+       zip
+FROM students
+WHERE admissionDate = 
+    (SELECT MIN(admissionDate) 
+     FROM students)
+ORDER BY lastName, firstName;
+
+--04
+select 
+    st.studentid, 
+    firstname, 
+    lastname, 
+    count(*) as numcourses
+from students st
+inner join registration r on r.studentid = st.studentid 
+inner join sections s on s.sectionid = r.sectionid 
+inner join courses c on c.courseid = s.courseid 
+where subjectcode = 'CS'
+and coursenumber = 1400
+group by st.studentid, firstname, lastname 
+having count(*) > 1 
+order by lastname, firstname;
+
+--05
+SELECT firstName, 
+       lastName, 
+       streetAddress, 
+       city, 
+       state, 
+       zip
+FROM professors
+WHERE state = 'CO'
+AND hireDate = 
+    (SELECT MIN(hireDate)
+     FROM professors
+     WHERE state = 'CO')
+ORDER BY lastName, firstName;
+
+--06
+SELECT DISTINCT p.firstName, 
+                p.lastName, 
+                p.streetAddress, 
+                p.city, 
+                p.state, 
+                p.zip, 
+                c.subjectCode, 
+                c.courseNumber
+FROM professors p
+JOIN sections s ON p.professorID = s.professorID
+JOIN courses c ON s.courseID = c.courseID
+WHERE c.subjectCode = 'WEB'
+AND hiredate = (
+                select max(hiredate) 
+                from professors p
+                INNER JOIN sections s ON p.professorID = s.professorID
+                INNER JOIN courses c ON s.courseID = c.courseID
+                WHERE c.subjectCode = 'WEB' 
+                )
+ORDER BY c.courseNumber, p.lastName, p.firstName;
+
+--07
+SELECT s.firstName, s.lastName, c.courseID, c.subjectCode, c.courseNumber,
+       TO_CHAR(sec.sectionStartDate, 'Mon DD YYYY HH:MI AM') AS SECTIME
+FROM Students s
+INNER JOIN Registration r ON s.studentID = r.studentID
+INNER JOIN Sections sec ON r.sectionID = sec.sectionID
+INNER JOIN Courses c ON sec.courseID = c.courseID
+WHERE c.subjectCode = 'NET'
+AND c.courseID IN (
+    SELECT DISTINCT sec2.courseID
+    FROM Sections sec2
+    WHERE TO_CHAR(sec2.sectionStartDate, 'HH24:MI') = '11:30'
+)
+ORDER BY s.lastName, s.firstName, c.courseID, sec.sectionStartDate;
+
+--08
+SELECT s.firstName, 
+       s.lastName, 
+       s.streetAddress, 
+       s.city, 
+       s.state AS, 
+       s.zip, 
+       description AS "ASSIGNMENTTYPE"
+FROM students s
+JOIN registration r ON s.studentID = r.studentID
+JOIN assignmentScore a ON r.studentID = a.studentID AND r.sectionID = a.sectionID
+JOIN assignmentCode ac ON a.assignmentTypeID = ac.assignmentTypeID
+WHERE ac.description = 'Midterm Exam' and a.assignmentnumber = '3'
+AND a.score = 
+    (SELECT MIN(score) 
+     FROM assignmentScore 
+     WHERE assignmentTypeID = 
+         (SELECT ac.assignmentTypeID 
+          FROM assignmentCode ac
+          inner join assignmentscore a on a.assignmenttypeid = ac.assignmenttypeid
+          WHERE description = 'Midterm Exam' and a.assignmentnumber = '3'))
+ORDER BY s.lastName, s.firstName; 
+
+--09
+SELECT s.firstName, 
+       s.lastName, 
+       s.streetaddress,
+       s.city, 
+       s.state, 
+       s.zip, 
+       ac.description, 
+       a.score
+FROM students s
+JOIN registration r ON s.studentID = r.studentID
+JOIN assignmentScore a ON r.studentID = a.studentID AND r.sectionID = a.sectionID
+JOIN assignmentCode ac ON a.assignmentTypeID = ac.assignmentTypeID
+WHERE r.sectionID = 22555 
+AND ac.description = 'Final Exam' 
+AND a.score < 
+    (SELECT AVG(score)
+     FROM assignmentScore
+     WHERE assignmentTypeID = 
+         (SELECT assignmentTypeID 
+          FROM assignmentCode 
+          WHERE description = 'Final Exam') 
+     AND sectionID = 22555)
+ORDER BY a.score DESC, s.lastName, s.firstName;
+
+--10
+SELECT distinct p.professorID, 
+       p.firstName, 
+       p.lastName,
+FROM professors p
+INNER JOIN sections s ON p.professorID = s.professorID
+INNER JOIN courses c ON s.courseID = c.courseID
+WHERE c.subjectCode = 'CS'
+AND s.locationID NOT IN
+    (SELECT  locationID FROM locations WHERE Building = 'OL' 
+     )
+ORDER BY p.lastName, p.firstName;
