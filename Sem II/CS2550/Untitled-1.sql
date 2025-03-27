@@ -1,9 +1,25 @@
--- Saurav Pokharel
--- CS2550
--- SQL Assignment 08
--- 04/29/2020
+/* select distinct s.studentid, s.city, NVL(t1.NumStudentspercity,0) as NumStudentspercity
+from students s
+left outer join
+    (select city, COUNT(*) as NumStudentspercity
+    from
+        (select distinct r.studentid, city
+        from registration r 
+        inner join students s on s.studentid = r.studentid)
+        group by city) t1 
+    on t1.city =  s.city
+    where state = 'ID'; 
+    
+    select firstname, lastname, 'students' as TableName
+    from students 
+    where state = 'ID'
+    union 
+    select firstname, lastname, 'Professors'
+    from professors
+    where state = 'ID'
+    order by lastname, firstname; 
 
--- 01
+    -- 01
 SELECT 
     b.BUILDING,    
     b.BUILDINGNAME, 
@@ -26,46 +42,12 @@ HAVING COUNT(*) = (SELECT MAX(COUNT(*))
                                      GROUP BY b.BUILDING, b.BUILDINGNAME, r.ROOM)
 ORDER BY b.BUILDINGNAME, b.BUILDING, r.ROOM;
 
--- 02
-SELECT distinct p.firstname AS PROFFIRST, 
-                p.lastname AS PROFLAST, 
-                st.firstname AS STUFIRST, 
-                st.lastname AS STULAST  
-FROM sections s
-INNER JOIN courses c
-ON s.courseid = c.courseid
-INNER JOIN registration r
-ON s.sectionid = r.sectionid
-INNER JOIN students st
-ON st.studentid = r.studentid
-INNER JOIN professors p
-ON s.professorid = p.professorid
-WHERE subjectdescription = 'Spanish'   
-ORDER BY st.lastname, 
-         st.firstname, 
-         p.lastname, 
-         p.firstname;
-
--- 03 
-SELECT firstname, 
-       lastname, 
-       city, 
-       state, 
-       zip, 
-       'Student' AS role
-FROM students
-WHERE lastname like 'W%n'
-UNION ALL
-SELECT firstname, 
-       lastname, 
-       city, 
-       state, 
-       zip, 
-       'Professor' AS role
-FROM professors
-WHERE lastname like 'W%n'
-ORDER BY lastname, 
-         firstname; 
-
--- 04
-
+SELECT distinct p.professorID, 
+       p.firstName, 
+       p.lastName
+FROM professors p
+INNER JOIN sections s ON p.professorID = s.professorID
+INNER JOIN courses c ON s.courseID = c.courseID
+WHERE c.subjectCode = 'CS'
+AND s.locationID NOT IN (SELECT  building FROM locations WHERE Building = 'OL')
+ORDER BY p.lastName, p.firstName;
