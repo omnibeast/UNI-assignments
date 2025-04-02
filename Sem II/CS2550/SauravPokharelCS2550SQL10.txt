@@ -1,0 +1,231 @@
+-- Saurav Pokharel
+-- CS2550
+-- SQL Assignment 08
+-- 04/29/2020
+
+-- 01
+SELECT 
+    b.BUILDING,    
+    b.BUILDINGNAME, 
+    r.ROOM, 
+    COUNT(*) AS NUM_SECTIONS
+FROM SECTIONS sec
+INNER JOIN LOCATIONS r ON sec.LOCATIONID = r.LOCATIONID
+INNER JOIN BUILDINGS b ON r.BUILDING = b.BUILDING
+INNER JOIN COURSES c ON sec.COURSEID = c.COURSEID
+WHERE c.SUBJECTCODE = 'WEB' 
+    AND b.BUILDINGNAME != 'Online Class'
+GROUP BY b.BUILDING, b.BUILDINGNAME, r.ROOM
+HAVING COUNT(*) = (SELECT MAX(COUNT(*)) 
+                                     FROM SECTIONS sec
+                                     INNER JOIN LOCATIONS r ON sec.LOCATIONID = r.LOCATIONID
+                                     INNER JOIN BUILDINGS b ON r.BUILDING = b.BUILDING
+                                     INNER JOIN COURSES c ON sec.COURSEID = c.COURSEID
+                                     WHERE c.SUBJECTCODE = 'WEB' 
+                                         AND b.BUILDINGNAME != 'Online Class'
+                                     GROUP BY b.BUILDING, b.BUILDINGNAME, r.ROOM)
+ORDER BY b.BUILDINGNAME, b.BUILDING, r.ROOM;
+
+-- 02
+SELECT distinct p.firstname AS PROFFIRST, 
+                p.lastname AS PROFLAST, 
+                st.firstname AS STUFIRST, 
+                st.lastname AS STULAST  
+FROM sections s
+INNER JOIN courses c
+ON s.courseid = c.courseid
+INNER JOIN registration r
+ON s.sectionid = r.sectionid
+INNER JOIN students st
+ON st.studentid = r.studentid
+INNER JOIN professors p
+ON s.professorid = p.professorid
+WHERE subjectdescription = 'Spanish'   
+ORDER BY st.lastname, 
+         st.firstname, 
+         p.lastname, 
+         p.firstname;
+
+-- 03 
+SELECT firstname, 
+       lastname, 
+       city, 
+       state, 
+       zip, 
+       'Student' AS role
+FROM students
+WHERE lastname like 'W%n'
+UNION ALL
+SELECT firstname, 
+       lastname, 
+       city, 
+       state, 
+       zip, 
+       'Professor' AS role
+FROM professors
+WHERE lastname like 'W%n'
+ORDER BY lastname, 
+         firstname; 
+
+-- 04
+SELECT DISTINCT l.locationId,
+                b.buildingName,
+                b.building,
+                l.room,
+                t.Numsections,
+                w.NumStudents
+FROM locations l
+INNER JOIN buildings b
+ON l.building=b.building
+INNER JOIN sections s
+ON s.locationId=l.locationID
+INNER JOIN courses c
+ON c.courseId=s.courseId
+LEFT OUTER JOIN
+( SELECT s.locationid, COUNT(*) AS NUMStudents
+FROM sections s
+INNER JOIN locations l
+ON l.locationid = s.locationid
+INNER JOIN registration r
+ON r.sectionid = s.sectionid
+INNER JOIN buildings b
+ON b.building = l.building
+INNER JOIN courses c
+ON s.courseid = c.courseid
+WHERE subjectcode = 'CS'
+AND b.buildingname != 'Online Class'
+GROUP BY s.locationid)w
+ON w.locationId=l.locationid
+LEFT OUTER JOIN 
+( SELECT s.locationid,count(*) AS NumSections
+FROM sections s
+INNER JOIN courses c
+ON c.courseId=s.courseId
+INNER JOIN locations l
+ON l.locationId = s.locationId
+INNER JOIN buildings b
+ON b.building = l.building
+ WHERE subjectcode = 'CS'
+ AND b.buildingName != 'Online Class'
+ GROUP BY s.locationId)t
+ON t.locationId=l.locationId
+WHERE c.subjectcode = 'CS'
+AND b.buildingName != 'Online Class'
+ORDER BY l.locationid;
+
+-- 05
+SELECT b.building, 
+       ROUND(AVG(sec.capacity), 2) AS avgBuildingCapacity
+FROM buildings b
+INNER JOIN locations l ON l.building = b.building
+INNER JOIN sections sec ON sec.locationId = l.locationId
+INNER JOIN courses c ON c.courseId = sec.courseId
+GROUP BY b.building
+UNION ALL
+SELECT 'Average Section Capacity is:' AS building, ROUND(AVG(sec.capacity), 2) AS avgBuildingCapacity
+FROM sections sec
+ORDER BY building DESC;
+
+-- 06
+SELECT p.professorId,
+       p.firstname,
+       p.lastname,
+       p.city,
+       p.state,
+       NVL(s.numsections, 0) AS numsections
+FROM professors p
+LEFT JOIN (
+    SELECT sec.professorId,
+           COUNT(*) AS numsections
+    FROM sections sec
+    INNER JOIN courses c ON sec.courseId = c.courseId
+    WHERE c.subjectcode IN ('CS', 'WEB', 'NET')
+    GROUP BY sec.professorId
+) s ON p.professorId = s.professorId
+WHERE p.state = 'MT'
+ORDER BY p.lastname, 
+         p.firstname;
+
+-- 07
+SELECT  b.building, 
+        b.buildingName,  
+        NVL(w.NumberofSections, 0) AS NUMBEROFSECTIONS
+FROM buildings b
+LEFT OUTER JOIN (
+    SELECT b.building, 
+           b.buildingName, 
+        COUNT(*) AS NumberofSections
+FROM buildings b
+INNER JOIN locations l ON b.building = l.building
+INNER JOIN sections s ON s.locationId = l.locationId
+INNER JOIN courses c ON c.courseId = s.courseId
+WHERE c.subjectCode IN ('CS', 'NET', 'WEB', 'MATH', 'ENGL', 'HIST', 'ZOOL', 'ART', 'COMM', 'BSAD')
+GROUP BY b.building, b.buildingName
+) w ON w.building = b.building AND w.buildingName = b.buildingName
+WHERE b.buildingName != 'Online Class'
+GROUP BY b.building, 
+         b.buildingName, w.NumberofSections
+ORDER BY b.building;
+
+-- 08
+SELECT distinct s.zip, 
+                s.city, 
+                NVL(t1.NUMSECTIONS, 0) AS NUMSECTIONS 
+FROM students s
+LEFT OUTER JOIN 
+(SELECT zip, COUNT(*) AS NUMSECTIONS
+FROM 
+(SELECT distinct zip, sectionid
+FROM students s
+INNER JOIN registration r
+ON s.studentid = r.studentid
+) 
+GROUP BY zip) t1
+ON t1.zip = s.zip
+WHERE city = 'Phoenix'
+AND state = 'AZ'
+ORDER BY zip;
+
+-- 09
+SELECT w.subjectCode,
+       w.courseNumber,
+       NVL(ol.onlineSections,0) AS onlinesections,
+       NVL(w.F2FSECTIONS,0) AS F2Fsections
+FROM(SELECT c.subjectCode,c.courseNumber,COUNT(*) AS F2FSECTIONS
+FROM courses c
+INNER JOIN sections s
+ON s.courseId=c.courseId
+WHERE c.subjectCode IN ('CS','NET','WEB')
+AND s.locationId!=0
+GROUP BY c.courseNumber,c.subjectCode)w
+INNER JOIN(SELECT c.subjectCode,c.courseNumber,COUNT(*) AS ONLINESECTIONs
+FROM courses c
+INNER JOIN sections s
+ON s.courseId=c.courseId
+WHERE c.subjectCode IN ('CS','NET','WEB')
+AND s.locationId=0
+GROUP BY c.courseNumber,c.subjectCode)ol
+ON ol.subjectCode=w.subjectCode
+AND ol.courseNumber=w.coursenumber
+WHERE w.subjectCode IN ('CS','NET','WEB')
+GROUP BY w.subjectCode,
+         w.courseNumber,
+         w.F2Fsections,ol.onlinesections
+ORDER BY w.subjectCode,
+         w.courseNumber;
+         
+-- 10
+SELECT s.studentId,
+       firstName,
+       lastName,
+       NVL(w.NUMSECTIONS,0) AS NumSections
+FROM students s
+LEFT OUTER JOIN 
+(SELECT studentID,count(*) As NumSections
+FROM registration
+GROUP BY studentId)w
+ON w.studentId=s.studentId
+WHERE state='ID'
+ANd city='Nampa'
+ORDER BY lastName,
+         firstName;
