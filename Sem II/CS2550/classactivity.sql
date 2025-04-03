@@ -1,3 +1,8 @@
+
+DROP TABLE UserTable;
+DROP TABLE SecurityQuestion;
+DROP TABLE securityAnswer;
+
 --Creating table
 CREATE TABLE UserTable (
     userID NUMBER(3,0) Not NULL,
@@ -10,9 +15,6 @@ CREATE TABLE UserTable (
     phoneNumber VARCHAR2(15)
 );
 
-DROP TABLE UserTable;
-DROP TABLE SecurityQuestion;
-DROP TABLE securityAnswer;
 
 -- Creating securityQuestion table
 CREATE TABLE SecurityQuestion (
