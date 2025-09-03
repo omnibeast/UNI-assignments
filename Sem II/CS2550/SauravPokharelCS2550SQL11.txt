@@ -1,0 +1,786 @@
+-- Saurav Pokharel
+-- CS2550
+-- SQL Assignment 11
+-- 04/23/2020
+
+--Drop table
+
+DROP table CustomerTable;
+DROP table Supplier;
+DROP table Vendor;
+DROP table ProductTable;
+DROP table VendorProduct;
+DROP table OrderTable;
+DROP table OrderItem;
+
+--Create table
+
+CREATE TABLE CustomerTable 
+(   sdCustomer_id Number(3,0) NOT NULL
+    , customerEmailAddress varchar2(120) NOT NULL 
+    , customerFirstName varchar2(25) NOT NULL
+    , customerLastName varChar2(50) NOT NULL    
+    , customerStreetAddress varChar2(100) NOT NULL
+    , customerCity varChar2(25) NOT NULL
+    , customerState varChar2(2) NOT NULL
+    , customerZip varChar2(5) NOT NULL );  
+CREATE TABLE Supplier
+(   sdSupplier_id Number(3,0) NOT NULL
+    , supplierName varchar2(100) NOT NULL    
+    , supplierStreetAddress varChar2(100) NOT NULL
+    , supplierCity varChar2(25) NOT NULL
+    , supplierState varChar2(2) NOT NULL
+    , supplierZip varChar2(5) NOT NULL );
+CREATE TABLE Vendor
+(   sdVendor_id Number(3,0) NOT NULL
+    , vendorEmailAddress varchar2(120) NOT NULL
+    , vendorName varchar2(100) NOT NULL
+    , vendorStreetAddress varChar2(100) NOT NULL
+    , vendorCity varChar2(25) NOT NULL
+    , vendorState varChar2(2) NOT NULL
+    , vendorZip varChar2(5) NOT NULL
+    , vendorPhone varchar2(10) NOT NULL );
+CREATE TABLE ProductTable
+(   sdProduct_id Number(3,0) NOT NUll
+    , productName varchar2(200) NOT NULL
+    , sdSupplier_id Number(3,0) NOT NULL );
+CREATE TABLE VendorProduct
+(   sdVendorProduct_id Number(3,0) NOT NULL
+    , sdVendor_id Number(3,0) 
+    , sdProduct_id Number(3,0) 
+    , quantityOnHand Number(3,0) 
+    , vendorProductPrice Number(6,2) NOT NULL );
+CREATE TABLE OrderTable
+(   sdOrder_id Number(3,0) NOT NULL
+    , sdCustomer_id Number(3,0) NOT NULL
+    , orderDateTime Date NOT NULL
+    , subTotal Number(6,2) NOT NULL
+    , taxAmount Number(6,2) NOT NULL
+    , shippingCost Number(6,2) NOT NULL
+    , ordertotal Number(6,2) NOT NULL );
+
+CREATE TABLE OrderItem
+(   sdOrder_id Number(3,0) NOT NULL
+    , sdVendorProduct_id Number(3,0) NOT NULL
+    , quantity Number(3,0) NOT NULL );
+
+
+--creating primary keys
+
+ALTER TABLE CustomerTable
+ADD CONSTRAINTS PK_customerTable
+PRIMARY KEY (sdCustomer_id);
+
+ALTER TABLE Supplier
+ADD CONSTRAINTS PK_Supplier
+PRIMARY KEY (sdSupplier_id);
+
+ALTER TABLE Vendor
+ADD CONSTRAINTS PK_Vendor
+PRIMARY KEY (sdVendor_id);
+
+ALTER TABLE ProductTable
+ADD CONSTRAINTS PK_ProductTable
+PRIMARY KEY (sdproduct_id);
+
+ALTER TABLE VendorProduct
+ADD CONSTRAINTS PK_VendorProduct
+PRIMARY KEY (sdVendorProduct_id);
+
+ALTER TABLE OrderTable
+ADD CONSTRAINTS PK_OrderTable
+PRIMARY KEY (sdOrder_id);
+
+//creating  foreign keys//
+ALTER TABLE ProductTable
+ADD CONSTRAINTS FK_ProductTable_sdSupplier_id
+FOREIGN KEY (sdSupplier_id) 
+References supplier(sdSupplier_id);
+
+ALTER TABLE VendorProduct
+ADD CONSTRAINTS FK_VendorProduct_sdVendor_id
+FOREIGN KEY (sdVendor_id) 
+References Vendor(sdVendor_id);
+
+ALTER TABLE VendorProduct
+ADD CONSTRAINTS FK_VendorProduct_sdProduct_id
+FOREIGN KEY(sdProduct_id) 
+References ProductTable(sdProduct_id);
+
+ALTER TABLE OrderTable
+ADD CONSTRAINT FK_OrderTable_sdcustomer_Id
+Foreign Key (sdcustomer_id) 
+REFERENCES customerTable (sdCustomer_id);
+
+
+ALTER TABLE OrderItem
+ADD CONSTRAINT FK_OrderItem_sdOrder_id
+FOREIGN KEY (sdOrder_id) 
+REFERENCES OrderTable(sdOrder_id);
+
+ALTER TABLE OrderItem
+ADD CONSTRAINT FK_OrderItem_sdVendorProduct_id
+FOREIGN KEY (sdVendorProduct_id) 
+REFERENCES VendorProduct(sdVendorProduct_id);
+
+--Inserting values
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(1,'donette.foller@cox.net','Donette',
+       'Foller','34 Center St','Hamilton','OH','45011');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(2,'mroyster@royster.com','Maryan',
+      'Royster','74 S Westgate St',
+      'Albany','NY','12204');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(3,'ernie_stenseth@aol.com',
+      'Ernie','Steneth','$5 E Liberty St',
+      'RidgeField Park','NJ','07660');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(4,'jina_briddick@briddick.com','Jina',
+      'Briddick','3898 Park Blvd',
+      'Boston','MA','02128');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(5,'sabra@uyetake.org','sabra',
+       'Uyetake','98839 Hawthorne Blvd #6101',
+       'Columbia','SC','29201');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(6,'brhym@rhym.com','Bobbye',
+      'Rhym','30 W 80th St #1995',
+      'San Carlos','CA','94070');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(7,'viva.toelkes@gmail.com','Viva',
+         'Toelkes','4284 Dorigo Ln',
+         'Chicago','IL','60647');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(8,'dominque.dickerson@dickerson.org','Dominque',
+      'Dickerson','69 Marquette Ave',
+      'Hayward','CA','94545');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(9,'latrice.tolfree@hotmail.com','Latrice',
+       'Tolfree','81 Norris Ave #525',
+       'Ronkonkoma','NY','11779');
+
+INSERT INTO CustomerTable
+(sdCustomer_id, customerEmailAddress, 
+ customerFirstName ,customerlastName, 
+ customerStreetAddress , customerCity , 
+ customerState , CustomerZip )
+VALUES(10,'stephaine@cox.net','Stephaine',
+      'Vinning','3717 Hamann Industrial Pky',
+      'San Francisco','CA','94104');
+
+//inserting into supplierTable//
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(1,'PrintingDimensions','34 Center St','Hamilton','OH','45011');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(2,'Franklin PetersInc','74 S Westgate St','Albany','NY','12204');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(3,'Knwz Products','45 E Liberty St','Ridgefield Park','NJ','07660');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(4,'Grace Pastries Inc','3898 Park Blvd','Boston','MA','02128');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(5,'Lowy Products and Services','98839 Hawthorne Blvd','Columbia','SC','29201');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(6,'Smiths, Patricia Garity','30 W 80th st #1995','San Carlos ','CA','94070');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(7,'Mark Iv Press','4284 Dorigo Ln','Chicago','IL','60647');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(8,'E A I Electronic Assocs Inc','69 Marquette Ave','Hayward','CA','94104');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(9,'United Product Lines','81 Norris Ave #525','Ronkonkoma','NY','11779');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(10,'Birite Foodservice','3717 Hamann Industrial Pkwy','San Francisco','CA','94104');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress , 
+ suppliercity , supplierstate , supplierzip )
+VALUES(11,'Roberts Supply Co Inc','8429 Miller Rd','Pelham','NY','10803');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress, 
+ suppliercity, supplierstate, supplierzip )
+VALUES(12,'Harris Corporation','4 Iwena St','Baltimore','MD','21202');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress, 
+ suppliercity, supplierstate, supplierzip )
+VALUES(13,'Armon Communiations','9 State Highway 57 #22','Jersey City','NJ','07306');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress, 
+ suppliercity, supplierstate, supplierzip )
+VALUES(14,'Tiplak Inc','80312 W 32nd St','Conroe','TX','77301');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress, 
+ suppliercity, supplierstate, supplierzip )
+VALUES(15,'Sportmaster International','6 Sunrise Ave','Utica','NY','13501');
+
+INSERT INTO supplier
+(sdSupplier_id, suppliername, supplierstreetAddress, 
+ suppliercity, supplierstate, supplierzip )
+VALUES(16,'Acme Supply Co','1953 telegraph Rd','Saint Joseph','MO','64504');
+
+INSERT INTO Supplier
+(sdSupplier_id ,supplierName,supplierStreetAddress,
+ supplierCity ,supplierState ,supplierZip)
+VALUES(17,'Warehose Office'||chr(38)||' Paper Prod','51556 W 20th Ave','Seattle','WA','98104');
+
+--Inserting into product table
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(1,'White Weber State University Womens Tank Top','1');
+
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(2,'Black Weber State University Womens Hooded Sweatshirt','2');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(3,'Steel Grey Weber State University Womens Cropped Short Sleeve T-shirt','3');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(4,'Yellow Weber State University 16 oz. Tumbler','5');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(5,'Weber State University Academic Year Planner','17');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(6,'White Weber State University Orbiter Pen','6');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(7,'Silver Weber State University Wildcats Key Tag','7');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(8,'Silver Weber State University Money Clip','16');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(9,'Weber State University Rain Poncho','9');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(10,'Weber State University Crew Neck Sweatshirt','2');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(11,'Weber State University Lip Balm','10');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(12,'Weber State University Alumni T-Shirt','12');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(13,'Weber State University Dad Short Sleeve T-Shirt','13');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(14,'Weber State University Volleyball Short Sleeve T-Shirt','14');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(15,'Weber State University Wildcats Rambler 20 oz. Tumbler','15');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(16,'Weber State University OtterBox iPhone 7/8 Symmetry Series Case','8');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(17,'Weber State University Wildcats State Decal','17');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(18,'Weber State University Mom Decal','1');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(19,'Weber State University Wildcats Decal','1');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(20,'Weber State University Putter Cover','9');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(21,'Weber State University Jersey','2');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(22,'Weber State University Crew Socks','6');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(23,'Weber State University Short Sleeve T-Shirt','16');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(24,'Weber State University .75L Camelbak Bottle','4');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(25,'Weber State University Boys Tri-Blend Short T-Shirt','3');
+
+INSERT INTO ProductTable
+(sdProduct_id, productName, sdSupplier_id)
+VALUES(26,'Weber State University Coaches Hat','11');
+
+
+--Inserting into vendor table
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, 
+ vendorEmailAddress, vendorPhone)
+VALUES(1, 'Eagle Software Inc', '5384 Southwyck Blvd', 'Douglasville', 'GA', '30135', 'info@eaglesoftwareinc.com', '7705078791');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, 
+ vendorEmailAddress, vendorPhone)
+VALUES(2, 'Art Crafters', '703 Beville Rd', 'Opa Locka', 'FL', '33054', 'support@artcrafters.com', '3056709628');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, vendorCity, 
+ vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(3, 'Burton '||chr(38)||' Davis', '70 Mechanic St', 'Northridge', 'CA', '91325', 'helpdesk@burtondavis.com', '8188644875');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(4, 'Jets Cybernetics', '99586 Main St', 'Dallas', 'TX', '75207', 'info@jetscybernetics.com', '2144282285');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(5, 'Professionals Unlimited', '66697 Park Pl #3224', 'Riverton', 'WY', '82501', 'inquiry@professionalsunlimited.com', '3073427795');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(6, 'Linguistic Systems Inc', '506 S Hacienda Dr', 'Atlantic City', 'NJ', '08401', 'help@linguisticsystemsinc.com', '6092285265');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(7, 'Price Business Services', '7 West Ave #1', 'Palatine', 'IL', '60067', 'support@pricebusinessservices.com', '8472221734');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(8, 'Mitsumi Electronics Corp', '9677 Commerce Dr', 'Richmond', 'VA', '23219', 'support@mitsumielectronicscorp.com', '8045505097');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(9, 'Sidewinder Products Corp', '8573 Lincoln Blvd', 'York', 'PA', '17404', 'helpdesk@sidewinderproductscorp.com', '7178093119');
+
+INSERT INTO Vendor
+(sdVendor_id, vendorName, vendorStreetAddress, 
+ vendorCity, vendorState, vendorZip, vendorEmailAddress, vendorPhone)
+VALUES(10, 'Circuit Solution Inc', '39 Moccasin Dr', 'San Francisco', 'CA', '94104', 'answers@circuitsolutioninc.com', '4154111775');
+
+
+--Inserting into vendorProduct table
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (1, 1, 2, 12, 48.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (2, 2, 4, 16, 42.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (3, 3, 9, 25, 5.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (4, 4, 12, 7, 19.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (5, 4, 14, 20, 19.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (6, 6, 17, 8, 6.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (7, 7, 20, 24, 25.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (8, 8, 15, 18, 18.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (9, 9, 23, 23, 30.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (10, 10, 25, 11, 15.99);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (11, 1, 26, 11, 25.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (12, 2, 2, 15, 48.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (13, 3, 4, 16, 42.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (14, 4, 9, 16, 5.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (15, 5, 12, 17, 19.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (16, 5, 14, 22, 19.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (17, 7, 17, 14, 6.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (18, 8, 20, 8, 25.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (19, 9, 22, 18, 18.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (20, 10, 23, 20, 30.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (21, 1, 25, 6, 15.99);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (22, 2, 26, 12, 25.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (23, 3, 2, 16, 48.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (24, 4, 4, 16, 42.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (25, 5, 9, 15, 5.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (26, 6, 12, 20, 19.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (27, 7, 14, 9, 19.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (28, 8, 17, 23, 6.95);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (29, 9, 20, 14, 25.00);
+
+INSERT INTO VendorProduct
+(sdVendorProduct_id, sdVendor_id, 
+ sdProduct_id, quantityOnHand, vendorProductPrice)
+VALUES (30, 10, 22, 16, 18.00);
+
+
+--Inserting into ordertable
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, 
+ orderDateTime, subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(1, 1, TO_DATE('Feb 14 2023 07:18 AM', 'Mon DD YYYY HH:MI AM'), 59.90, 3.44, 3.94, 67.28);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(2, 2, TO_DATE('Feb 18 2023 05:54 AM', 'Mon DD YYYY HH:MI AM'), 63.70, 2.55, 14.28, 80.53);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(3, 3, TO_DATE('Jan 19 2023 10:03 AM', 'Mon DD YYYY HH:MI AM'), 65.85, 4.37, 24.53, 94.75);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(4, 4, TO_DATE('Jan 21 2023 08:26 AM', 'Mon DD YYYY HH:MI AM'), 186.00, 10.42, 9.55, 205.97);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(5, 5, TO_DATE('Jan 14 2023 09:16 AM', 'Mon DD YYYY HH:MI AM'), 46.85, 2.81, 6.77, 56.43);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(6, 6, TO_DATE('Feb 24 2023 08:14 AM', 'Mon DD YYYY HH:MI AM'), 73.80, 4.43, 3.08, 81.31);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(7, 7, TO_DATE('Jan 03 2023 08:49 PM', 'Mon DD YYYY HH:MI AM'), 111.99, 7.00, 5.90, 124.89);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(8, 8, TO_DATE('Feb 17 2023 10:36 AM', 'Mon DD YYYY HH:MI AM'), 39.90, 2.39, 25.50, 67.79);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(9, 9, TO_DATE('Feb 16 2023 01:54 AM', 'Mon DD YYYY HH:MI AM'), 41.80, 1.67, 18.04, 61.51);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(10, 10, TO_DATE('Jan 24 2023 02:50 AM', 'Mon DD YYYY HH:MI AM'), 48.00, 2.88, 21.17, 72.05);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(11, 3, TO_DATE('Jan 08 2023 10:28 PM', 'Mon DD YYYY HH:MI AM'), 31.85, 2.11, 13.73, 47.69);
+
+INSERT INTO OrderTable
+(sdOrder_id, sdCustomer_id, orderDateTime, 
+ subTotal, taxAmount, shippingCost, orderTotal)
+VALUES(12, 8, TO_DATE('Jan 20 2023 04:24 AM', 'Mon DD YYYY HH:MI AM'), 80.95, 4.05, 9.00, 94.00);
+
+--Inserting into orderItem table
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (1, 1, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (1, 3, 2);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (2, 14, 4);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (2, 16, 2);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (3, 23, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (3, 25, 3);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (4, 11, 3);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (4, 29, 3);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (5, 27, 3);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (5, 28, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (6, 3, 4);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (6, 29, 2);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (7, 21, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (8, 26, 4);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (9, 25, 4);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (9, 30, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (10, 1, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (11, 14, 2);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (11, 16, 1);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (12, 7, 2);
+
+INSERT INTO OrderItem (sdOrder_id, 
+                       sdVendorProduct_id, 
+                       quantity)
+VALUES (12, 11, 1);
