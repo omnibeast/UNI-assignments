@@ -1,0 +1,74 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #8661C1;
+    color: white
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+header {
+    background-color: rgb(0,0,0);
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+}
+
+h1 {
+    font-family: 700;
+    margin: 0;
+}
+
+.logo-right-bottom {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    height: 100px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+#countdown {
+    display: flex;
+    background: rgba(0, 0, 0, 6);
+    gap: 30px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 3);
+}
+
+.time-container {
+    text-align: center;
+}
+
+.time {
+    font-size: 4em;
+    font-weight: 700;
+}
+
+.laberl {
+    font-size: 1.4em;
+    color: #CCC;  
+}
+
+footer {
+    clear: both;
+    position: relative;
+    height: 200px;
+    margin-top: -200px;
+    text-align: center;
+    padding: 20px 0;
+    background-color: rgb(0,0,0, 8);
+
+}
