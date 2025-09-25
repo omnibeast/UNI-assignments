@@ -1,3 +1,5 @@
+// Inventory Management System
+// defining initial inventory
 let inventory = [
     { id: 1, name: "Wireless Mouse", category: "Electronics", quantity: 50, price: 29.99 },
     { id: 2, name: "Keyboard", category: "Electronics", quantity: 25, price: 49.99 },
@@ -25,7 +27,7 @@ function addProduct(name, category, quantity, price) {
 }
 
 // function to remove product 
-fucntion removeProduct(id) {
+function removeProduct(id) {
     const index = inventory.findIndex(product => product.id === id);
     if (index === -1) {
         console.error(`Error: Product not found.`);
