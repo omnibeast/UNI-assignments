@@ -24,7 +24,7 @@ function initializeDashboard() {
 function addMission(mission) {
     const missionList = document.getElementById('mission-list');
     const li = document.createElement('li');
-    li.textContent = text;
+    li.textContent = mission;
     missionList.appendChild(li);
 }
 
@@ -38,7 +38,7 @@ function updateMission(index, newText) {
 }
 
 //function to remove a mission
-function removeMission(index) {
+function deleteMission(index) {
     const missionList = document.getElementById('mission-list');
     const items = missionList.getElementsByTagName('li');
     if (index >= 0 && index < items.length) {
