@@ -21,7 +21,7 @@ function initializeDashboard() {
 }
 
 //functions to add missions
-function addMision(mission) {
+function addMission(mission) {
     const missionList = document.getElementById('mission-list');
     const li = document.createElement('li');
     li.textContent = text;
