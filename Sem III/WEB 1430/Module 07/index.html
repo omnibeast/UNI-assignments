@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css">    
+</head>
+<body>
+    <main class="container">
+        <h1>Rock . Paper . Scissors</h1>
+        <section class="controls">
+            <label for="rounds">Best of</label>
+            <select id="rounds">
+                <option value="1">1</option>
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="7">7</option>
+                <option value="9">9</option>
+            </select>
+            <button id="reset">Reset Game</button>
+        </section>
+        <section class="arena">
+            <div class="player-panel">
+                <h2>You</h2>
+                <div id="playerChoice" class="choiceBox">-</div>
+                <div class="score">Score: <span id="playerScore">0</span></div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="computer-panel">
+                <h2>Computer</h2>
+                <div id="computerChoice" class="choiceBox">-</div>
+                <div class="score">Score: <span id="computerScore">0</span></div>
+            </div>
+        </section>
+        <section class="picker">
+            <button class="pick" data-move="rock" aria-label="Rock">✊</button>
+            <button class="pick" data-move="paper" aria-label="Paper">✋</button>
+            <button class="pick" data-move="scissors" aria-label="Scissors">✌️</button>
+        </section>
+        <section class="feedback">
+            <p id="result">Make your move!</p>
+            <p class="meta">Round: <span id="roundNumber">0</span> / <span id="roundTotal">5</span></p>
+            <p class="meta">Ties: <span id="ties">0</span></p>
+        </section>
+        <section class="final hiddeen" id="finalScreen">
+            <h2 id="finalText"></h2>
+            <button id="newGameBtn">Play Again</button>
+        </section>
+        <aside class="leaderboard">
+            <h3>Leaderboard</h3>
+            <p>Best wins (single gane): <strong id="highScore">0</strong></p>
+            <small>(Saved locally)</small>
+        </aside>
+        <footer class="footer">
+            <p>© 2025 <a href="https://sauravpokharel.com.np" target="_blank">Saurav Pokharel</a></p>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    
+</body>
+
+</html>
