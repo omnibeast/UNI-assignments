@@ -1,183 +1,185 @@
+// 🎉 Celebration messages embedded directly (no XHR)
+const messages = [
+  "Congratulations — you did it!",
+  "Hats off to your hard work!",
+  "The tassel was worth the hassle!",
+  "Your future is bright — shine on!",
+  "Cheers to your amazing journey!",
+  "Well done, graduate!",
+  "You made it to the finish line!",
+  "Here’s to new beginnings!",
+  "Keep reaching for the stars!",
+  "Celebrate — this moment is yours!"
+];
 
-(() => {
-    const choices = ['rock','paper','scissors'];
-    const emoji = { rock:'✊', paper:'✋', scissors:'✌️' };
-  
-    const playerChoiceEl = document.getElementById('playerChoice');
-    const computerChoiceEl = document.getElementById('computerChoice');
-    const playerScoreEl = document.getElementById('playerScore');
-    const computerScoreEl = document.getElementById('computerScore');
-    const resultEl = document.getElementById('result');
-    const roundNumberEl = document.getElementById('roundNumber');
-    const roundTotalEl = document.getElementById('roundTotal');
-    const tiesEl = document.getElementById('ties');
-    const pickButtons = document.querySelectorAll('.pick');
-    const roundsSelect = document.getElementById('rounds');
-    const resetBtn = document.getElementById('reset');
-    const finalScreen = document.getElementById('finalScreen');
-    const finalText = document.getElementById('finalText');
-    const newGameBtn = document.getElementById('newGameBtn');
-    const highScoreEl = document.getElementById('highScore');
-  
-    let playerScore = 0;
-    let computerScore = 0;
-    let ties = 0;
-    let roundsPlayed = 0;
-    let totalRounds = parseInt(roundsSelect.value, 10);
-  
-    const HS_KEY = 'rps_highscore';
-    function loadHighScore(){
-      const s = localStorage.getItem(HS_KEY);
-      const val = s ? parseInt(s,10) : 0;
-      highScoreEl.textContent = val;
-      return val;
-    }
-    function tryUpdateHighScore(val){
-      const current = loadHighScore();
-      if(val > current){
-        localStorage.setItem(HS_KEY, String(val));
-        highScoreEl.textContent = val;
-        return true;
-      }
-      return false;
+let countdownInterval = null;
+
+// Return a Date object for the next graduation (June 1 this year or next)
+function getGraduationDate() {
+  const now = new Date();
+  // month index: 5 -> June (0 = Jan)
+  let grad = new Date(now.getFullYear(), 5, 1, 0, 0, 0, 0);
+  if (now >= grad) {
+    // if it's already June 1 or later this year, use next year
+    grad = new Date(now.getFullYear() + 1, 5, 1, 0, 0, 0, 0);
+  }
+  return grad;
+}
+
+function initializeCountdown() {
+  const app = document.getElementById("app");
+
+  // clear in case of re-init
+  app.innerHTML = "";
+
+  const title = document.createElement("h1");
+  title.textContent = "Graduation Countdown Timer";
+
+  const countdownDisplay = document.createElement("p");
+  countdownDisplay.id = "countdown-display";
+  countdownDisplay.textContent = ""; // will be filled by updater
+
+  // Buttons
+  const controls = document.createElement("div");
+  controls.className = "controls";
+
+  const startBtn = document.createElement("button");
+  startBtn.textContent = "Start Countdown";
+  startBtn.addEventListener("click", startCountdown);
+
+  const stopBtn = document.createElement("button");
+  stopBtn.textContent = "Stop Countdown";
+  stopBtn.className = "secondary";
+  stopBtn.addEventListener("click", stopCountdown);
+
+  const zeroBtn = document.createElement("button");
+  zeroBtn.textContent = "Set Countdown to Zero";
+  zeroBtn.addEventListener("click", setCountdownToZero);
+
+  controls.append(startBtn, stopBtn, zeroBtn);
+
+  const messageEl = document.createElement("div");
+  messageEl.id = "congrats-message";
+  messageEl.className = "message";
+  messageEl.style.display = "none";
+
+  app.append(title, countdownDisplay, controls, messageEl);
+
+  // auto-start
+  startCountdown();
+}
+
+function formatRemaining(distance) {
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+function getRandomMessage() {
+  const idx = Math.floor(Math.random() * messages.length);
+  return messages[idx];
+}
+
+function startCountdown() {
+  const display = document.getElementById("countdown-display");
+  const msg = document.getElementById("congrats-message");
+  msg.style.display = "none";
+
+  const graduationDate = getGraduationDate().getTime();
+
+  // clear any existing interval
+  if (countdownInterval) clearInterval(countdownInterval);
+
+  function update() {
+    const now = Date.now();
+    const distance = graduationDate - now;
+
+    if (distance <= 0) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+      display.textContent = "";
+      msg.textContent = getRandomMessage();
+      msg.style.display = "block";
+      return;
     }
 
-    function resetUI(){
-      playerChoiceEl.textContent = '—';
-      computerChoiceEl.textContent = '—';
-      playerScoreEl.textContent = '0';
-      computerScoreEl.textContent = '0';
-      resultEl.textContent = 'Make your move!';
-      roundNumberEl.textContent = '0';
-      roundTotalEl.textContent = String(totalRounds);
-      tiesEl.textContent = '0';
-      finalScreen.classList.add('hidden');
-      clearHighlights();
-    }
-  
-    function clearHighlights(){
-      playerChoiceEl.className = 'choiceBox';
-      computerChoiceEl.className = 'choiceBox';
-    }
-  
-    function pickRandom(){
-      const i = Math.floor(Math.random()*choices.length);
-      return choices[i];
-    }
-  
-    function decide(a,b){
-      if(a === b) return 'tie';
-      if(a === 'rock' && b === 'scissors') return 'win';
-      if(a === 'scissors' && b === 'paper') return 'win';
-      if(a === 'paper' && b === 'rock') return 'win';
-      return 'lose';
-    }
-  
-    function highlightResult(playerOutcome){
-      clearHighlights();
-      if(playerOutcome === 'win'){
-        playerChoiceEl.classList.add('highlight-win');
-        computerChoiceEl.classList.add('highlight-lose');
-      } else if(playerOutcome === 'lose'){
-        playerChoiceEl.classList.add('highlight-lose');
-        computerChoiceEl.classList.add('highlight-win');
-      } else {
-        playerChoiceEl.classList.add('highlight-lose');
-        computerChoiceEl.classList.add('highlight-lose');
-      }
-      setTimeout(() => clearHighlights(), 700);
-    }
-  
-    function updateScoresUI(){
-      playerScoreEl.textContent = String(playerScore);
-      computerScoreEl.textContent = String(computerScore);
-      tiesEl.textContent = String(ties);
-      roundNumberEl.textContent = String(roundsPlayed);
-    }
-  
-    function endGame(){
-      const userWon = playerScore > computerScore;
-      const text = userWon ? `You win the match ${playerScore} — ${computerScore}! 🎉` :
-                   (playerScore < computerScore ? `Computer wins ${computerScore} — ${playerScore}.` : `It's a draw ${playerScore} — ${computerScore}.`);
-      finalText.textContent = text;
-      finalScreen.classList.remove('hidden');
+    display.textContent = formatRemaining(distance);
+  }
 
-      tryUpdateHighScore(playerScore);
+  // Immediate update (avoid 1-second initial delay)
+  update();
+  countdownInterval = setInterval(update, 1000);
+}
+
+function stopCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+}
+
+function setCountdownToZero() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  const display = document.getElementById("countdown-display");
+  const msg = document.getElementById("congrats-message");
+  display.textContent = "";
+  msg.textContent = getRandomMessage();
+  msg.style.display = "block";
+}
+
+/* ---------------------
+   XHR Practice Section
+   --------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  // initialize countdown when DOM ready
+  initializeCountdown();
+
+  // XHR practice wiring
+  const getInfoBtn = document.getElementById("getInfoBtn");
+  const postInput = document.getElementById("postIdInput");
+  const postInfo = document.getElementById("postInfo");
+
+  getInfoBtn.addEventListener("click", () => {
+    const raw = postInput.value;
+    const id = parseInt(raw, 10);
+
+    postInfo.innerHTML = ""; // reset
+
+    if (Number.isNaN(id) || id < 1 || id > 10) {
+      postInfo.innerHTML = `<p style="color:crimson;">Please enter a number between 1 and 10.</p>`;
+      return;
     }
 
-    function playRound(playerMove){
-      if(roundsPlayed >= totalRounds) return; 
-      const compMove = pickRandom();
-      roundsPlayed += 1;
-  
-      playerChoiceEl.textContent = emoji[playerMove] || playerMove;
-      computerChoiceEl.textContent = emoji[compMove] || compMove;
-  
-      const outcome = decide(playerMove, compMove);
-      if(outcome === 'win'){
-        playerScore += 1;
-        resultEl.textContent = `You win this round! ${playerMove} beats ${compMove}.`;
-      } else if(outcome === 'lose'){
-        computerScore += 1;
-        resultEl.textContent = `You lose this round. ${compMove} beats ${playerMove}.`;
-      } else {
-        ties += 1;
-        resultEl.textContent = `It's a tie — both chose ${playerMove}.`;
-      }
-  
-      highlightResult(outcome);
-      updateScoresUI();
-  
-      const needed = Math.ceil(totalRounds / 2);
-      if(playerScore >= needed || computerScore >= needed || roundsPlayed >= totalRounds){
-        setTimeout(() => endGame(), 400);
-      }
-    }
-  
-    pickButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if(roundsPlayed >= totalRounds && (playerScore >= Math.ceil(totalRounds/2) || computerScore >= Math.ceil(totalRounds/2))){
-          return;
+    // simple XHR fetch from jsonplaceholder
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", `https://jsonplaceholder.typicode.com/posts/${id}`, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            const post = JSON.parse(xhr.responseText);
+            postInfo.innerHTML = `<h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.body)}</p>`;
+          } catch (e) {
+            postInfo.innerHTML = `<p style="color:crimson;">Error parsing response.</p>`;
+          }
+        } else {
+          postInfo.innerHTML = `<p style="color:crimson;">Error fetching data (status ${xhr.status}).</p>`;
         }
-        const move = btn.dataset.move;
-        playRound(move);
-      });
-    });
-  
-    roundsSelect.addEventListener('change', () => {
-      totalRounds = parseInt(roundsSelect.value, 10);
-      roundsPlayed = 0;
-      playerScore = 0;
-      computerScore = 0;
-      ties = 0;
-      roundTotalEl.textContent = String(totalRounds);
-      resetUI();
-    });
-  
-    resetBtn.addEventListener('click', () => {
-      totalRounds = parseInt(roundsSelect.value,10);
-      roundsPlayed = 0;
-      playerScore = 0;
-      computerScore = 0;
-      ties = 0;
-      roundTotalEl.textContent = String(totalRounds);
-      resetUI();
-    });
-  
-    newGameBtn.addEventListener('click', () => {
-      roundsPlayed = 0;
-      playerScore = 0;
-      computerScore = 0;
-      ties = 0;
-      resetUI();
-    });
+      }
+    };
+    xhr.send();
+  });
+});
 
-    (function init(){
-      totalRounds = parseInt(roundsSelect.value,10);
-      roundTotalEl.textContent = String(totalRounds);
-      resetUI();
-      loadHighScore();
-    })();
-  
-  })();
-  
+// small helper to avoid injecting raw text (basic escape)
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
