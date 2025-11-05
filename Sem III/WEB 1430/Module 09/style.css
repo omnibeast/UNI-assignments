@@ -1,0 +1,92 @@
+body {
+    font-family: "Alan Sans", sans-serif;
+    background-color: #121212; 
+    color: #ffffff; 
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#app-container {
+    max-width: 600px;
+    width: 100%;
+    background: #1e1e1e; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); 
+}
+
+h1 {
+    font-family: "Bungee", sans-serif;
+    text-align: center;
+    color: #ffffff; 
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input {
+    font-family: "Alan Sans", sans-serif;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #555; 
+    border-radius: 4px;
+    width: 200px;
+    margin-right: 10px;
+    background-color: #2a2a2a; 
+    color: #ffffff; 
+}
+
+input::placeholder {
+    color: #cccccc; 
+}
+
+button {
+    font-family: "Alan Sans", sans-serif;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3; 
+}
+
+#error-message {
+    color: #ff6b6b; 
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+.todo-item {
+    padding: 10px;
+    border-bottom: 1px solid #333; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo-item.completed {
+    text-decoration: line-through;
+    color: #888; 
+}
+
+.todo-item.not-completed {
+    color: #ffffff; 
+}

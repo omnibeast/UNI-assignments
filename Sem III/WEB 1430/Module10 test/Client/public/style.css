@@ -1,0 +1,26 @@
+input,
+textarea {
+    display: block;
+    margin: 5px;
+
+}
+
+section {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid grey;
+}
+
+.individual-item {
+    height: 400px;
+    width: auto;
+    border: 1px solid grey;
+    margin:5px;
+    padding: 5px;
+    display: inline-block;
+
+}
+
+.center-element{
+    text-align: center;
+}
